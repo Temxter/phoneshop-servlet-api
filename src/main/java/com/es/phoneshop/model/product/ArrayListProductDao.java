@@ -15,17 +15,12 @@ public class ArrayListProductDao implements ProductDao {
       productList = getSampleProducts();
     }
 
-    synchronized private void addProductToList(Product product) {
-        product.setId(maxId++);
-        productList.add(product);
-    }
-
     @Override
     public Product getProduct(Long id) throws ProductNotFoundException {
         return productList.stream()
                 .filter(product -> id.equals(product.getId()))
                 .findAny()
-                .orElseThrow(() -> new ProductNotFoundException());
+                .orElseThrow(() -> new ProductNotFoundException(String.format("Продукт с [id = %d] не найден.", id)));
     }
 
     @Override
@@ -34,15 +29,22 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public void save(Product product) {
-        addProductToList(product);
+    synchronized public void save(Product product) {
+        if (product.getId() != null) {
+            productList.stream()
+                    .filter(p -> product.getId().equals(p.getId()))
+                    .findAny()
+                    .ifPresent(p -> p = product);
+        }
+        else {
+            product.setId(maxId++);
+            productList.add(product);
+        }
     }
 
     @Override
     synchronized public void delete(Long id) {
-        productList = productList.stream()
-                .filter(product -> id != product.getId())
-                .collect(Collectors.toList());
+        productList.removeIf(product -> id.equals(product.getId()));
     }
 
     private List<Product> getSampleProducts(){
