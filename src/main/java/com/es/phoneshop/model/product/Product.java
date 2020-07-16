@@ -36,6 +36,16 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public void replaceProduct(Product product) {
+        this.id = product.id;
+        this.code = product.code;
+        this.description = product.description;
+        this.price = product.price;
+        this.currency = product.currency;
+        this.stock = product.stock;
+        this.imageUrl = product.imageUrl;
+    }
+
     public Long getId() {
         return id;
     }

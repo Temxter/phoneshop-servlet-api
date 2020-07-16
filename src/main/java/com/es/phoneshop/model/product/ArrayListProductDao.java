@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ArrayListProductDao implements ProductDao {
@@ -12,15 +13,15 @@ public class ArrayListProductDao implements ProductDao {
     private long maxId = 0L;
 
     public ArrayListProductDao() {
-      productList = getSampleProducts();
+        productList = getSampleProducts();
     }
 
     @Override
-    public Product getProduct(Long id) throws ProductNotFoundException {
+    public Product getProduct(Long id) {
         return productList.stream()
                 .filter(product -> id.equals(product.getId()))
                 .findAny()
-                .orElseThrow(() -> new ProductNotFoundException(String.format("Продукт с [id = %d] не найден.", id)));
+                .orElseThrow(() -> new ProductNotFoundException(String.format("Product with [id = %d] not founded.", id)));
     }
 
     @Override
@@ -31,15 +32,16 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     synchronized public void save(Product product) {
         if (product.getId() != null) {
-            productList.stream()
+            Optional<Product> foundedProduct = productList.stream()
                     .filter(p -> product.getId().equals(p.getId()))
-                    .findAny()
-                    .ifPresent(p -> p = product);
+                    .findAny();
+            if (foundedProduct.isPresent()) {
+                foundedProduct.get().replaceProduct(product);
+                return;
+            }
         }
-        else {
-            product.setId(maxId++);
-            productList.add(product);
-        }
+        product.setId(maxId++);
+        productList.add(product);
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ArrayListProductDao implements ProductDao {
         productList.removeIf(product -> id.equals(product.getId()));
     }
 
-    private List<Product> getSampleProducts(){
+    private List<Product> getSampleProducts() {
         List<Product> result = new ArrayList<>();
         Currency usd = Currency.getInstance("USD");
         result.add(new Product(1L, "sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg"));
