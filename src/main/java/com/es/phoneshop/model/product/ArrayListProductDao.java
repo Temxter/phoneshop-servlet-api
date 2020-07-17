@@ -30,7 +30,7 @@ public class ArrayListProductDao implements ProductDao {
         return productList.stream()
                 .filter(product -> id.equals(product.getId()))
                 .findAny()
-                .orElseThrow(() -> new ProductNotFoundException(String.format("Product with [id = %d] not founded.", id)));
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     @Override
