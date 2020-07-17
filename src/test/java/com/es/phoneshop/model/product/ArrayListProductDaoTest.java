@@ -19,7 +19,7 @@ public class ArrayListProductDaoTest
 
     @Test
     public void testFindProductsNoResults() {
-        assertFalse("productDao is empty!", productDao.findProducts().isEmpty());
+        assertFalse("productDao is empty!", productDao.findProducts(null, null, null).isEmpty());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class ArrayListProductDaoTest
     @Test
     public void testSearchProducts() {
         String query = "Samsung III";
-        List<Product> daoProducts = productDao.search(query);
+        List<Product> daoProducts = productDao.findProducts(query, null, null);
         List<String> expectDescriptions = new ArrayList<String>();
         expectDescriptions.add("Samsung Galaxy S III");
         expectDescriptions.add("Samsung Galaxy S II");
@@ -77,7 +77,29 @@ public class ArrayListProductDaoTest
             Optional<String> result = expectDescriptions.stream()
                     .filter(description -> product.getDescription().equals(description))
                     .findAny();
-            assertTrue(result.isPresent());
+            assertTrue("Search = [Samsung III] not corrected: LIST = " + daoProducts.stream()
+                            .reduce("",
+                                    (str, productStream) -> str + "[" + productStream.getDescription() + "] ",
+                                    Objects::toString),
+                    result.isPresent());
+        }
+    }
+
+    @Test
+    public void testSearchSort(){
+        SortField sortField = SortField.price;
+        SortOrder sortOrder = SortOrder.desc;
+        List<Product> daoProducts = productDao.findProducts(null, sortField, sortOrder);
+        List<BigDecimal> expectFirstPrices = new ArrayList<>();
+        expectFirstPrices.add(new BigDecimal(1000));
+        expectFirstPrices.add(new BigDecimal(420));
+        expectFirstPrices.add(new BigDecimal(320));
+        for (int i = 0; i < expectFirstPrices.size(); i++) {
+            assertTrue("Sorting is not right!" + daoProducts.stream()
+                            .reduce("",
+                                    (str, productStream) -> str + "[" + productStream.getPrice() + "] ",
+                                    Objects::toString),
+                    expectFirstPrices.get(i).equals(daoProducts.get(i).getPrice()));
         }
     }
 }

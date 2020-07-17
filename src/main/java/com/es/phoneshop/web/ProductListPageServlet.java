@@ -1,8 +1,6 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.product.ArrayListProductDao;
-import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.product.ProductNotFoundException;
+import com.es.phoneshop.model.product.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -14,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.Optional;
 
 public class ProductListPageServlet extends HttpServlet {
 
@@ -28,14 +27,17 @@ public class ProductListPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String query = request.getParameter("query");
-        List<Product> productList = null;
-        if (query != null) {
-            productList = arrayListProductDao.search(query);
-            request.setAttribute("query", query);
-        }
-        else {
-            productList = arrayListProductDao.findProducts();
-        }
+        String field = request.getParameter("field");
+        String order = request.getParameter("order");
+        request.setAttribute("sort", field);
+        request.setAttribute("order", order);
+        request.setAttribute("query", query);
+
+        List<Product> productList = arrayListProductDao.findProducts(query,
+                    Optional.ofNullable(field).map(SortField::valueOf).orElse(null),
+                    Optional.ofNullable(order).map(SortOrder::valueOf).orElse(null));
+
+
         request.setAttribute("products", productList);
         request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
     }

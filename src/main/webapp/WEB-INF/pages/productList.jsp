@@ -16,8 +16,14 @@
     <thead>
       <tr>
         <td>Image</td>
-        <td>Description</td>
-        <td class="price">Price</td>
+        <td>Description
+          <tags:sortLink field="description" order="asc" query="${param.query}"></tags:sortLink>
+          <tags:sortLink field="description" order="desc" query="${param.query}"></tags:sortLink>
+        </td>
+        <td class="price">Price
+          <tags:sortLink field="price" order="asc" query="${param.query}"></tags:sortLink>
+          <tags:sortLink field="price" order="desc" query="${param.query}"></tags:sortLink>
+        </td>
       </tr>
     </thead>
     <c:forEach var="product" items="${products}">

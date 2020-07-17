@@ -1,5 +1,9 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.model.product.comparators.ProductDescriptionComparator;
+import com.es.phoneshop.model.product.comparators.ProductPriceComparator;
+import com.es.phoneshop.model.product.comparators.ProductRelevantSearchComparator;
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,11 +26,6 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public List<Product> findProducts() {
-        return productList;
-    }
-
-    @Override
     synchronized public void save(Product product) {
         if (product.getId() != null) {
             for (int i = 0; i < productList.size(); i++) {
@@ -46,30 +45,41 @@ public class ArrayListProductDao implements ProductDao {
         productList.removeIf(product -> id.equals(product.getId()));
     }
 
-    public List<Product> search(String query) {
-        String[] splitQuery = query.toLowerCase().split(" ");
-        // search rights
-        List<Product> foundProducts = productList.stream()
-                .filter(p -> {
-                    for (String q : splitQuery) {
-                        if (p.getDescription().toLowerCase().contains(q))
-                            return true;
-                    }
-                    return false;
-                })
-                .collect(Collectors.toList());
-        // relevant sorting
-        Comparator<Product> productComparator = (first, second) -> {
-            int firstCounter = 0, secondCounter = 0;
-            for (String q : splitQuery) {
-                if (first.getDescription().toLowerCase().contains(q))
-                    firstCounter++;
-                if (second.getDescription().toLowerCase().contains(q))
-                    secondCounter++;
-            }
-            return secondCounter - firstCounter; // reverse matches comparator
-        };
-        foundProducts.sort(productComparator);
+    @Override
+    public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
+        List<Product> foundProducts = productList;
+        String[] splitQuery = null;
+        // search
+        if (query != null && !query.isEmpty()) {
+            String[] finalSplitQuery = query.toLowerCase().split(" ");
+            splitQuery = finalSplitQuery;
+            foundProducts = productList.stream()
+                    .filter(p -> {
+                        for (String q : finalSplitQuery) {
+                            if (p.getDescription().toLowerCase().contains(q))
+                                return true;
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toList());
+        }
+        //sort
+        if (sortField != null && sortOrder != null) {
+            if (foundProducts == null)
+                foundProducts = new ArrayList<>(productList);
+
+            Comparator<Product> productComparator = null;
+            if (sortField == SortField.description)
+                productComparator = new ProductDescriptionComparator();
+            else
+                productComparator = new ProductPriceComparator();
+            if (sortOrder == SortOrder.desc)
+                productComparator = productComparator.reversed();
+
+            foundProducts.sort(productComparator);
+        } else if (splitQuery != null) {
+            foundProducts.sort(new ProductRelevantSearchComparator(splitQuery).reversed());
+        }
         return foundProducts;
     }
 
