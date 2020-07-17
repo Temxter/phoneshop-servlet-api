@@ -32,12 +32,12 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     synchronized public void save(Product product) {
         if (product.getId() != null) {
-            Optional<Product> foundedProduct = productList.stream()
-                    .filter(p -> product.getId().equals(p.getId()))
-                    .findAny();
-            if (foundedProduct.isPresent()) {
-                foundedProduct.get().replaceProduct(product);
-                return;
+            for (int i = 0; i < productList.size(); i++) {
+                Product gotProduct = productList.get(i);
+                if (gotProduct.getId() == product.getId()) {
+                    productList.set(i, product);
+                    return;
+                }
             }
         }
         product.setId(maxId++);
