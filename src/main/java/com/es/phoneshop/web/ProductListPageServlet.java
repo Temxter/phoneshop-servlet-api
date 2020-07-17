@@ -27,7 +27,16 @@ public class ProductListPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("products", arrayListProductDao.findProducts());
+        String query = request.getParameter("query");
+        List<Product> productList = null;
+        if (query != null) {
+            productList = arrayListProductDao.search(query);
+            request.setAttribute("query", query);
+        }
+        else {
+            productList = arrayListProductDao.findProducts();
+        }
+        request.setAttribute("products", productList);
         request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
     }
 

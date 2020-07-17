@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Currency;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -63,5 +63,21 @@ public class ArrayListProductDaoTest
                 otherProduct.getCode(), savedProduct.getCode()),
                 otherProduct.getCode(),
                 savedProduct.getCode());
+    }
+
+    @Test
+    public void testSearchProducts() {
+        String query = "Samsung III";
+        List<Product> daoProducts = productDao.search(query);
+        List<String> expectDescriptions = new ArrayList<String>();
+        expectDescriptions.add("Samsung Galaxy S III");
+        expectDescriptions.add("Samsung Galaxy S II");
+        expectDescriptions.add("Samsung Galaxy S");
+        for (Product product : daoProducts) {
+            Optional<String> result = expectDescriptions.stream()
+                    .filter(description -> product.getDescription().equals(description))
+                    .findAny();
+            assertTrue(result.isPresent());
+        }
     }
 }

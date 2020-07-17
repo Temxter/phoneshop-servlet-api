@@ -1,10 +1,7 @@
 package com.es.phoneshop.model.product;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArrayListProductDao implements ProductDao {
@@ -47,6 +44,33 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     synchronized public void delete(Long id) {
         productList.removeIf(product -> id.equals(product.getId()));
+    }
+
+    public List<Product> search(String query) {
+        String[] splitQuery = query.toLowerCase().split(" ");
+        // search rights
+        List<Product> foundProducts = productList.stream()
+                .filter(p -> {
+                    for (String q : splitQuery) {
+                        if (p.getDescription().toLowerCase().contains(q))
+                            return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
+        // relevant sorting
+        Comparator<Product> productComparator = (first, second) -> {
+            int firstCounter = 0, secondCounter = 0;
+            for (String q : splitQuery) {
+                if (first.getDescription().toLowerCase().contains(q))
+                    firstCounter++;
+                if (second.getDescription().toLowerCase().contains(q))
+                    secondCounter++;
+            }
+            return secondCounter - firstCounter; // reverse matches comparator
+        };
+        foundProducts.sort(productComparator);
+        return foundProducts;
     }
 
     private List<Product> getSampleProducts() {
