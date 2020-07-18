@@ -39,7 +39,9 @@ public class ArrayListProductDaoTest
 
     private Product getProductSample() {
         Currency usd = Currency.getInstance("USD");
-        Product newProduct = new Product("iphone10", "Apple iPhone 10", new BigDecimal(600), usd, 10, "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/refurb-iphoneX-silver_FMT_WHH?wid=400&hei=400&fmt=jpeg&qlt=80&op_usm=0.5,0.5&.v=1546626276301");
+        List<ProductPrice> productPrices = new ArrayList<>();
+        productPrices.add(new ProductPrice(new BigDecimal(600), usd));
+        Product newProduct = new Product("iphone10", "Apple iPhone 10", productPrices, 10, "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/refurb-iphoneX-silver_FMT_WHH?wid=400&hei=400&fmt=jpeg&qlt=80&op_usm=0.5,0.5&.v=1546626276301");
         return newProduct;
     }
 

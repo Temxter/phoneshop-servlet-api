@@ -7,26 +7,23 @@
 <tags:master pageTitle="${product.description}">
 <a href="${pageContext.request.contextPath}">All products</a>
 
+    <h1>${product.description}</h1>
 <table>
     <tr>
-        <td>Description</td>
-        <td>${product.description}</td>
-    </tr>
-    <tr>
-        <th>Image</th>
-        <th><img src="${product.imageUrl}"></th>
+        <td>Image</td>
+        <td><img src="${product.imageUrl}"></td>
     </tr>
     <tr>
         <td>Code</td>
         <td>${product.code}</td>
     </tr>
     <tr>
-        <th>Price</th>
-        <th><fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/></th>
+        <td>Price</td>
+        <td><fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/></td>
     </tr>
     <tr>
-        <th>Stock</th>
-        <th>${product.stock}</th>
+        <td>Stock</td>
+        <td>${product.stock}</td>
     </tr>
 </table>
 </tags:master>

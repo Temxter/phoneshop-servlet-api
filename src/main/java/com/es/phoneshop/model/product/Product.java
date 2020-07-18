@@ -1,39 +1,40 @@
 package com.es.phoneshop.model.product;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 
 public class Product {
     private Long id;
     private String code;
     private String description;
-    /** null means there is no price because the product is outdated or new */
-    private BigDecimal price;
-    /** can be null if the price is null */
-    private Currency currency;
+    private List<ProductPrice> priceList;
     private int stock;
     private String imageUrl;
 
     public Product() {
+        priceList = new ArrayList<>();
     }
 
     public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
-        this.id = id;
-        this.code = code;
-        this.description = description;
-        this.price = price;
-        this.currency = currency;
-        this.stock = stock;
-        this.imageUrl = imageUrl;
+        this(id, code, description, null, stock, imageUrl);
+        this.newPrice(new ProductPrice(price, currency));
     }
 
-    public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
+    public Product(Long id, String code, String description, List<ProductPrice> priceList, int stock, String imageUrl) {
+        this(code, description, priceList, stock, imageUrl);
+        this.id = id;
+    }
+
+    public Product(String code, String description, List<ProductPrice> priceList, int stock, String imageUrl) {
         this.code = code;
         this.description = description;
-        this.price = price;
-        this.currency = currency;
+        this.priceList = priceList;
         this.stock = stock;
         this.imageUrl = imageUrl;
+        if (this.priceList == null)
+            this.priceList = new ArrayList<>();
     }
 
     public Long getId() {
@@ -60,20 +61,24 @@ public class Product {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public List<ProductPrice> getPriceList() {
+        return priceList;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public BigDecimal getPrice() {
+        return priceList.size() > 0
+                ? priceList.get(priceList.size() - 1).getPrice()
+                : new BigDecimal(0);
     }
 
     public Currency getCurrency() {
-        return currency;
+        return priceList.size() > 0
+                ? priceList.get(priceList.size() - 1).getCurrency()
+                : Currency.getInstance("USD");
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+    public void newPrice(ProductPrice price) {
+        priceList.add(price);
     }
 
     public int getStock() {
