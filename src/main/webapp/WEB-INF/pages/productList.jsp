@@ -37,7 +37,8 @@
                 <td><a href="${pageContext.request.contextPath}/products/${product.id}">${product.description}</a></td>
                 <td class="price">
                   <div class="popup">
-                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+                    <fmt:formatNumber value="${product.productPrice.price}" type="currency"
+                                      currencySymbol="${product.productPrice.currency.symbol}"/>
                     <span class="popuptext">
                       <h3>Price history</h3>
                       <h4>${product.description}</h4>

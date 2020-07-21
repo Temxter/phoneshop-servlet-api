@@ -1,10 +1,13 @@
-package com.es.phoneshop.model.product;
+package com.es.phoneshop.model.product.dao.impl;
 
+import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.comparators.ProductDescriptionComparator;
 import com.es.phoneshop.model.product.comparators.ProductPriceComparator;
 import com.es.phoneshop.model.product.comparators.ProductRelevantSearchComparator;
+import com.es.phoneshop.model.product.dao.ProductDao;
+import com.es.phoneshop.model.product.enums.SortField;
+import com.es.phoneshop.model.product.enums.SortOrder;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,7 +58,7 @@ public class ArrayListProductDao implements ProductDao {
 
     @Override
     public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
-        List<Product> foundProducts = productList;
+        List<Product> foundProducts = null;
         String[] splitQuery = null;
         // search
         if (query != null && !query.isEmpty()) {
@@ -64,8 +67,9 @@ public class ArrayListProductDao implements ProductDao {
             foundProducts = productList.stream()
                     .filter(p -> {
                         for (String q : finalSplitQuery) {
-                            if (p.getDescription().toLowerCase().contains(q))
+                            if (p.getDescription().toLowerCase().contains(q)) {
                                 return true;
+                            }
                         }
                         return false;
                     })
@@ -73,21 +77,27 @@ public class ArrayListProductDao implements ProductDao {
         }
         //sort
         if (sortField != null && sortOrder != null) {
-            if (foundProducts == null)
+            if (foundProducts == null) {
                 foundProducts = new ArrayList<>(productList);
+            }
 
             Comparator<Product> productComparator = null;
-            if (sortField == SortField.description)
+            if (sortField == SortField.DESCRIPTION) {
                 productComparator = new ProductDescriptionComparator();
-            else
-                productComparator = new ProductPriceComparator();
-            if (sortOrder == SortOrder.desc)
+            }
+            else {
+                    productComparator = new ProductPriceComparator();
+                }
+            if (sortOrder == SortOrder.DESC) {
                 productComparator = productComparator.reversed();
+            }
 
             foundProducts.sort(productComparator);
         } else if (splitQuery != null) {
             foundProducts.sort(new ProductRelevantSearchComparator(splitQuery).reversed());
         }
-        return foundProducts;
+        return foundProducts == null
+                ? productList
+                : foundProducts;
     }
 }

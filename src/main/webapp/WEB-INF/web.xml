@@ -11,12 +11,12 @@
   </context-param>
   
   <listener>
-    <listener-class>com.es.phoneshop.web.DemoDataServletContextListener</listener-class>
+    <listener-class>com.es.phoneshop.web.listeners.DemoDataServletContextListener</listener-class>
   </listener>
 
   <servlet>
     <servlet-name>productList</servlet-name>
-    <servlet-class>com.es.phoneshop.web.ProductListPageServlet</servlet-class>
+    <servlet-class>com.es.phoneshop.web.servlets.ProductListPageServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -26,7 +26,7 @@
 
   <servlet>
     <servlet-name>productDetails</servlet-name>
-    <servlet-class>com.es.phoneshop.web.ProductDetailsPageServlet</servlet-class>
+    <servlet-class>com.es.phoneshop.web.servlets.ProductDetailsPageServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -36,7 +36,7 @@
 
   <error-page>
     <location>/WEB-INF/pages/productNotFound.jsp</location>
-    <exception-type>com.es.phoneshop.model.product.ProductNotFoundException</exception-type>
+    <exception-type>com.es.phoneshop.model.product.dao.impl.ProductNotFoundException</exception-type>
   </error-page>
 
   <error-page>

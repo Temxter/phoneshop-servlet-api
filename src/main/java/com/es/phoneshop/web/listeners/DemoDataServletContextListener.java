@@ -1,15 +1,9 @@
-package com.es.phoneshop.web;
+package com.es.phoneshop.web.listeners;
 
-import com.es.phoneshop.model.product.ArrayListProductDao;
-import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductSaveSampleData;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
 
 public class DemoDataServletContextListener implements ServletContextListener {
 

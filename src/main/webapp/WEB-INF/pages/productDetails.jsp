@@ -19,7 +19,8 @@
     </tr>
     <tr>
         <td>Price</td>
-        <td><fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/></td>
+        <td><fmt:formatNumber value="${product.productPrice.price}" type="currency"
+                              currencySymbol="${product.productPrice.currency.symbol}"/></td>
     </tr>
     <tr>
         <td>Stock</td>

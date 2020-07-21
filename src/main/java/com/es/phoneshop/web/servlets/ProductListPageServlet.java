@@ -1,6 +1,9 @@
-package com.es.phoneshop.web;
+package com.es.phoneshop.web.servlets;
 
 import com.es.phoneshop.model.product.*;
+import com.es.phoneshop.model.product.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.product.enums.SortField;
+import com.es.phoneshop.model.product.enums.SortOrder;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -8,9 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 

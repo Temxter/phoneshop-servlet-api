@@ -10,6 +10,7 @@ public class Product {
     private String code;
     private String description;
     private List<ProductPrice> priceList;
+    private ProductPrice currentPrice;
     private int stock;
     private String imageUrl;
 
@@ -30,11 +31,14 @@ public class Product {
     public Product(String code, String description, List<ProductPrice> priceList, int stock, String imageUrl) {
         this.code = code;
         this.description = description;
-        this.priceList = priceList;
         this.stock = stock;
         this.imageUrl = imageUrl;
-        if (this.priceList == null)
+        if (this.priceList == null) {
             this.priceList = new ArrayList<>();
+        } else {
+            this.priceList = priceList;
+            currentPrice = priceList.get(priceList.size() - 1);
+        }
     }
 
     public Long getId() {
@@ -65,19 +69,16 @@ public class Product {
         return priceList;
     }
 
-    public BigDecimal getPrice() {
-        return priceList.size() > 0
-                ? priceList.get(priceList.size() - 1).getPrice()
-                : new BigDecimal(0);
+    public ProductPrice getProductPrice() {
+        return currentPrice;
     }
 
-    public Currency getCurrency() {
-        return priceList.size() > 0
-                ? priceList.get(priceList.size() - 1).getCurrency()
-                : Currency.getInstance("USD");
+    private void setCurrentPrice(ProductPrice currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public void newPrice(ProductPrice price) {
+        setCurrentPrice(price);
         priceList.add(price);
     }
 

@@ -8,6 +8,8 @@ public class ProductPriceComparator implements Comparator<Product> {
 
     @Override
     public int compare(Product first, Product second) {
-        return first.getPrice().subtract(second.getPrice()).intValue();
+        return first.getProductPrice().getPrice()
+                .subtract(second.getProductPrice().getPrice())
+                .intValue();
     }
 }
