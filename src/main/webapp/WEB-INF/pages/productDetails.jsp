@@ -6,7 +6,10 @@
 
 <tags:master pageTitle="${product.description}">
 <a href="${pageContext.request.contextPath}">All products</a>
-
+    <p class="success">${message}</p>
+    <c:if test="${not empty error}">
+        <p class="error">${error}</p>
+    </c:if>
     <h1>${product.description}</h1>
 <table>
     <tr>
@@ -19,12 +22,20 @@
     </tr>
     <tr>
         <td>Price</td>
-        <td><fmt:formatNumber value="${product.productPrice.price}" type="currency"
+        <td class="right-text"><fmt:formatNumber value="${product.productPrice.price}" type="currency"
                               currencySymbol="${product.productPrice.currency.symbol}"/></td>
     </tr>
     <tr>
         <td>Stock</td>
-        <td>${product.stock}</td>
+        <td class="right-text">${product.stock}</td>
     </tr>
 </table>
+    <form method="post">
+        <input class="right-text" id="quantity" name="quantity" value="1">
+        <label for="quantity">Quantity: </label>
+        <input type="submit" value="Add to cart">
+        <c:if test="${not empty error}">
+            <p class="error">${error}</p>
+        </c:if>
+    </form>
 </tags:master>
