@@ -6,9 +6,11 @@
 
 <tags:master pageTitle="${product.description}">
 <a href="${pageContext.request.contextPath}">All products</a>
-    <p class="success">${message}</p>
+    <p>${cart}</p>
+
+    <p class="success">${param.message}</p>
     <c:if test="${not empty error}">
-        <p class="error">${error}</p>
+        <p class="error">Product not added to cart: incorrect value of quantity. ${error}</p>
     </c:if>
     <h1>${product.description}</h1>
 <table>
@@ -31,11 +33,18 @@
     </tr>
 </table>
     <form method="post">
-        <input class="right-text" id="quantity" name="quantity" value="1">
-        <label for="quantity">Quantity: </label>
-        <input type="submit" value="Add to cart">
-        <c:if test="${not empty error}">
-            <p class="error">${error}</p>
-        </c:if>
+        <div>
+            <label for="quantity">Quantity: </label>
+            <input class="right-text" id="quantity" name="quantity"
+                   value="${not empty param.quantity
+                   ? param.quantity
+                   : 1}">
+            <div>
+                <input type="submit" value="Add to cart">
+            </div>
+            <c:if test="${not empty error}">
+                <p class="error">${error}</p>
+            </c:if>
+        </div>
     </form>
 </tags:master>

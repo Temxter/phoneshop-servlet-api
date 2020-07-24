@@ -105,9 +105,9 @@ public class ArrayListProductDaoTest
         for (int i = 0; i < expectFirstPrices.size(); i++) {
             assertTrue("Sorting is not right!" + daoProducts.stream()
                             .reduce("",
-                                    (str, productStream) -> str + "[" + productStream.getProductPrice() + "] ",
+                                    (str, productStream) -> str + "[" + productStream.getProductPrice().getPrice() + "] ",
                                     Objects::toString),
-                    expectFirstPrices.get(i).equals(daoProducts.get(i).getProductPrice()));
+                    expectFirstPrices.get(i).equals(daoProducts.get(i).getProductPrice().getPrice()));
         }
     }
 }

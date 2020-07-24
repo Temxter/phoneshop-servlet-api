@@ -33,7 +33,7 @@ public class Product {
         this.description = description;
         this.stock = stock;
         this.imageUrl = imageUrl;
-        if (this.priceList == null) {
+        if (priceList == null) {
             this.priceList = new ArrayList<>();
         } else {
             this.priceList = priceList;

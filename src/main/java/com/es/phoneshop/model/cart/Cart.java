@@ -17,4 +17,9 @@ public class Cart {
     public void add(CartItem cartItem) {
         itemList.add(cartItem);
     }
+
+    @Override
+    public String toString() {
+        return itemList.toString();
+    }
 }
