@@ -47,4 +47,17 @@
             </c:if>
         </div>
     </form>
+    <c:if test="${not empty recentlyViewedProducts}">
+        <h2>Recently viewed</h2>
+        <div class="viewed-items">
+            <c:forEach var="product" items="${recentlyViewedProducts}">
+            <div class="viewed-item">
+                <img class="product-tile" src="${product.imageUrl}">
+                <p><a href="${pageContext.request.contextPath}/products/${product.id}">${product.description}</a></p>
+                <p><fmt:formatNumber value="${product.productPrice.price}" type="currency"
+                                                   currencySymbol="${product.productPrice.currency.symbol}"/></p>
+            </div>
+            </c:forEach>
+        </div>
+    </c:if>
 </tags:master>

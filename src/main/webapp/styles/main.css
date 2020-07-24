@@ -36,6 +36,22 @@ img.product-tile {
   color: green;
 }
 
+.viewed-items {
+  display: flex;
+  flex-direction: row;
+}
+
+.viewed-item {
+  margin: 0px 2px;
+  width: 150px;
+  border: #ccc solid 1px;
+  text-align: center;
+}
+
+.viewed-item > img {
+  width: 100px;
+}
+
 /* Page specific styles */
 body.product-list {
 

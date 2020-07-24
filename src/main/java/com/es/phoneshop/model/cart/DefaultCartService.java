@@ -49,6 +49,7 @@ public class DefaultCartService implements CartService {
             int totalQuantity = item.getQuantity() + quantity;
             if (totalQuantity <= product.getStock()) {
                 item.setQuantity(totalQuantity);
+                saveList(req, cart);
             } else {
                 throw new OutOfStockException(String
                         .format("Item quantity [= %d] more than stock [= %d] of item!", totalQuantity, product.getStock()));
@@ -57,12 +58,16 @@ public class DefaultCartService implements CartService {
         else {
             if (quantity <= product.getStock()) {
                 cart.add(new CartItem(product, quantity));
+                saveList(req, cart);
             }
             else {
                 throw new OutOfStockException(String
                         .format("Item quantity [= %d] more than stock [= %d] of item!", quantity, product.getStock()));
             }
         }
+    }
 
+    private void saveList(HttpServletRequest req, Cart cart) {
+        req.getSession().setAttribute(CARD_SESSION_ATTRIBUTE, cart);
     }
 }

@@ -4,6 +4,8 @@ import com.es.phoneshop.model.product.*;
 import com.es.phoneshop.model.product.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.product.enums.SortField;
 import com.es.phoneshop.model.product.enums.SortOrder;
+import com.es.phoneshop.model.viewedproducts.DefaultRecentlyViewedProductsService;
+import com.es.phoneshop.model.viewedproducts.RecentlyViewedProductsService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -17,11 +19,13 @@ import java.util.Optional;
 public class ProductListPageServlet extends HttpServlet {
 
     private ArrayListProductDao arrayListProductDao;
+    private RecentlyViewedProductsService recentlyViewedService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         arrayListProductDao = ArrayListProductDao.getInstance();
+        recentlyViewedService = DefaultRecentlyViewedProductsService.getInstance();
     }
 
     @Override
@@ -32,6 +36,7 @@ public class ProductListPageServlet extends HttpServlet {
         request.setAttribute("sort", field);
         request.setAttribute("order", order);
         request.setAttribute("query", query);
+        request.setAttribute("recentlyViewedProducts", recentlyViewedService.getList(request));
 
         List<Product> productList = arrayListProductDao.findProducts(query,
                     Optional.ofNullable(field).map(SortField::valueOf).orElse(null),

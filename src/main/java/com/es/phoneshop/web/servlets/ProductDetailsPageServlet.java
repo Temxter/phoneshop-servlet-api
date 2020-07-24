@@ -5,6 +5,7 @@ import com.es.phoneshop.model.cart.DefaultCartService;
 import com.es.phoneshop.model.cart.OutOfStockException;
 import com.es.phoneshop.model.product.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.viewedproducts.DefaultRecentlyViewedProductsService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,12 +20,28 @@ public class ProductDetailsPageServlet extends HttpServlet {
 
     private ArrayListProductDao productDao;
     private CartService cartService;
+    private DefaultRecentlyViewedProductsService recentlyViewedService;
+
+    private Product getProduct(HttpServletRequest req) {
+        String path = req.getPathInfo();
+        long productId = Long.parseLong(path.substring(1));
+        Product product = productDao.getProduct(productId);
+        recentlyViewedService.addProduct(req, product);
+        req.setAttribute("product", product);
+        req.setAttribute("recentlyViewedProducts", recentlyViewedService.getList(req));
+        return product;
+    }
+
+    private void setCart(HttpServletRequest req){
+        req.setAttribute("cart", cartService.getCart(req).getItemList().toString());
+    }
 
     @Override
     public void init() throws ServletException {
         super.init();
         productDao = ArrayListProductDao.getInstance();
         cartService = DefaultCartService.getInstance();
+        recentlyViewedService = DefaultRecentlyViewedProductsService.getInstance();
     }
 
     @Override
@@ -32,18 +49,6 @@ public class ProductDetailsPageServlet extends HttpServlet {
         getProduct(req);
         setCart(req);
         req.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(req, resp);
-    }
-
-    private Product getProduct(HttpServletRequest req) {
-        String path = req.getPathInfo();
-        long productId = Long.parseLong(path.substring(1));
-        Product product = productDao.getProduct(productId);
-        req.setAttribute("product", product);
-        return product;
-    }
-
-    private void setCart(HttpServletRequest req){
-        req.setAttribute("cart", cartService.getCart(req).getItemList().toString());
     }
 
     @Override
