@@ -43,7 +43,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
     }
 
     private void setCart(HttpServletRequest req){
-        req.setAttribute("cart", cartService.getCart().getItemList().toString());
+        req.setAttribute("cart", cartService.getCart(req).getItemList().toString());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
             int quantity = numberFormat.parse(req.getParameter("quantity")).intValue();
             req.setAttribute("quantity", quantity);
             long productId = product.getId();
-            cartService.add(productId, quantity);
+            cartService.add(req, productId, quantity);
         } catch (ParseException e) {
             req.setAttribute("error", "It is not a number");
             doGet(req, resp);

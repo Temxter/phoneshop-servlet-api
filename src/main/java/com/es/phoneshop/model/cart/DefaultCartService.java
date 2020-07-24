@@ -1,22 +1,20 @@
 package com.es.phoneshop.model.cart;
 
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.product.dao.ProductDao;
 import com.es.phoneshop.model.product.dao.impl.ArrayListProductDao;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class DefaultCartService implements CartService {
 
-    private Cart cart;
+    private final String CARD_SESSION_ATTRIBUTE = DefaultCartService.class.getName() + ".cart";
 
     private static DefaultCartService instance;
 
-
     private DefaultCartService() {
-        cart = new Cart();
     }
 
     public static synchronized DefaultCartService getInstance() {
@@ -27,12 +25,19 @@ public class DefaultCartService implements CartService {
     }
 
     @Override
-    public Cart getCart() {
+    public Cart getCart(HttpServletRequest req) {
+        Cart cart = (Cart) req.getSession().getAttribute(CARD_SESSION_ATTRIBUTE);
+        if (cart == null) {
+            cart = new Cart();
+            req.getSession().setAttribute(CARD_SESSION_ATTRIBUTE, cart);
+        }
         return cart;
     }
 
     @Override
-    public void add(long productId, int quantity) throws OutOfStockException {
+    public void add(HttpServletRequest req, long productId, int quantity) throws OutOfStockException {
+        Cart cart = getCart(req);
+
         Product product = ArrayListProductDao.getInstance().getProduct(productId);
         List<CartItem> cartList = cart.getItemList();
         Optional<CartItem> optionalItem = cartList.stream()
@@ -49,7 +54,7 @@ public class DefaultCartService implements CartService {
                         .format("Item quantity [= %d] more than stock [= %d] of item!", totalQuantity, product.getStock()));
             }
         }
-         else {
+        else {
             if (quantity <= product.getStock()) {
                 cart.add(new CartItem(product, quantity));
             }
