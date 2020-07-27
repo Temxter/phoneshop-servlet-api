@@ -1,13 +1,15 @@
-package com.es.phoneshop.model.viewedproducts;
+package com.es.phoneshop.model.services.impl;
 
 import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.services.RecentlyViewedProductsService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DefaultRecentlyViewedProductsService implements RecentlyViewedProductsService {
+
+    final int maxSize = 3;
 
     private final String RECENTLY_VIEWED_ATTRIBUTE
             = DefaultRecentlyViewedProductsService.class.getName() + ".viewedProducts";
@@ -34,9 +36,10 @@ public class DefaultRecentlyViewedProductsService implements RecentlyViewedProdu
 
     @Override
     public void addProduct(HttpServletRequest req, Product product) {
-        final int maxSize = 3;
         LinkedList<Product> productLinkedList = (LinkedList<Product>) getList(req);
         if (productLinkedList.contains(product)) {
+            productLinkedList.remove(product);
+            productLinkedList.addFirst(product);
             return;
         }
         if (productLinkedList.size() >= maxSize) {

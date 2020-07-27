@@ -32,7 +32,7 @@
         <td class="right-text">${product.stock}</td>
     </tr>
 </table>
-    <form method="post">
+    <form method="post" action="productDetails">
         <div>
             <label for="quantity">Quantity: </label>
             <input class="right-text" id="quantity" name="quantity"

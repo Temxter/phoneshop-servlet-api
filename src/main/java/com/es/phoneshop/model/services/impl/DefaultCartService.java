@@ -1,12 +1,16 @@
-package com.es.phoneshop.model.cart;
+package com.es.phoneshop.model.services.impl;
 
+import com.es.phoneshop.cart.Cart;
+import com.es.phoneshop.cart.CartItem;
+import com.es.phoneshop.exceptions.OutOfStockException;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.product.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.services.CartService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DefaultCartService implements CartService {
 
@@ -14,7 +18,13 @@ public class DefaultCartService implements CartService {
 
     private static DefaultCartService instance;
 
+    private final ArrayListProductDao productDao;
+
+    private final ReentrantLock lock;
+
     private DefaultCartService() {
+        productDao = ArrayListProductDao.getInstance();
+        lock = new ReentrantLock();
     }
 
     public static synchronized DefaultCartService getInstance() {
@@ -38,32 +48,33 @@ public class DefaultCartService implements CartService {
     public void add(HttpServletRequest req, long productId, int quantity) throws OutOfStockException {
         Cart cart = getCart(req);
 
-        Product product = ArrayListProductDao.getInstance().getProduct(productId);
+        Product product = productDao.getProduct(productId);
         List<CartItem> cartList = cart.getItemList();
         Optional<CartItem> optionalItem = cartList.stream()
                 .filter(item -> item.getProduct().equals(product))
                 .findAny();
 
+        CartItem item = null;
         if (optionalItem.isPresent()) {
-            CartItem item = optionalItem.get();
-            int totalQuantity = item.getQuantity() + quantity;
-            if (totalQuantity <= product.getStock()) {
-                item.setQuantity(totalQuantity);
-                saveList(req, cart);
-            } else {
-                throw new OutOfStockException(String
-                        .format("Item quantity [= %d] more than stock [= %d] of item!", totalQuantity, product.getStock()));
-            }
+            item = optionalItem.get();
+        } else {
+            item = new CartItem(product, 0);
         }
-        else {
-            if (quantity <= product.getStock()) {
-                cart.add(new CartItem(product, quantity));
-                saveList(req, cart);
-            }
-            else {
+
+        lock.lock();
+        int realStock = item.getProduct().getStock();
+        int totalClientQuantity = quantity + item.getQuantity();
+        if (totalClientQuantity <= realStock) {
+            item.getProduct().setStock(realStock - quantity);
+            lock.unlock();
+            item.setQuantity(totalClientQuantity);
+            cart.add(item);
+            saveList(req, cart);
+        } else {
                 throw new OutOfStockException(String
-                        .format("Item quantity [= %d] more than stock [= %d] of item!", quantity, product.getStock()));
-            }
+                        .format("Item quantity [= %d] more than stock [= %d] of item!",
+                                totalClientQuantity,
+                                product.getStock()));
         }
     }
 

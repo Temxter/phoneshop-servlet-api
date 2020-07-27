@@ -1,42 +1,52 @@
-package com.es.phoneshop.model.viewedproducts;
+package com.es.phoneshop.model.services.impl;
 
-import com.es.phoneshop.model.cart.Cart;
-import com.es.phoneshop.model.cart.DefaultCartService;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductSaveSampleData;
-import com.es.phoneshop.model.product.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.services.impl.DefaultRecentlyViewedProductsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.core.PowerMockUtils;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.LinkedList;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
+@PrepareForTest({ ArrayListProductDao.class })
 public class DefaultRecentlyViewedProductsServiceTest {
 
     private DefaultRecentlyViewedProductsService service;
 
-    @Mock
-    HttpServletRequest req;
-    @Mock
-    HttpSession httpSession;
+    private final ArrayListProductDao productDao = mock(ArrayListProductDao.class);
 
-    LinkedList<Product> productLinkedList;
+    @Mock
+    private HttpServletRequest req;
+    @Mock
+    private HttpSession httpSession;
+    @Mock
+    private Product product;
+
+    private LinkedList<Product> productLinkedList;
 
     @Before
     public void init() {
         service = DefaultRecentlyViewedProductsService.getInstance();
         productLinkedList = new LinkedList<>();
-        ProductSaveSampleData.saveSampleProducts();
         Mockito.when(req.getSession()).thenReturn(httpSession);
         Mockito.when(httpSession.getAttribute(Mockito.anyString())).thenReturn(productLinkedList);
+        Whitebox.setInternalState(ArrayListProductDao.class, "arrayListProductDao", productDao);
+        Mockito.when(productDao.getProduct(Mockito.anyLong())).thenReturn(product);
     }
 
     @Test

@@ -1,11 +1,11 @@
 package com.es.phoneshop.web.servlets;
 
-import com.es.phoneshop.model.cart.CartService;
-import com.es.phoneshop.model.cart.DefaultCartService;
-import com.es.phoneshop.model.cart.OutOfStockException;
-import com.es.phoneshop.model.product.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.model.services.CartService;
+import com.es.phoneshop.model.services.impl.DefaultCartService;
+import com.es.phoneshop.exceptions.OutOfStockException;
+import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.viewedproducts.DefaultRecentlyViewedProductsService;
+import com.es.phoneshop.model.services.impl.DefaultRecentlyViewedProductsService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -54,18 +54,21 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Product product = getProduct(req);
+        int quantity;
         try {
             Locale locale = req.getLocale();
             NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
-            int quantity = numberFormat.parse(req.getParameter("quantity")).intValue();
-            req.setAttribute("quantity", quantity);
-            long productId = product.getId();
-            cartService.add(req, productId, quantity);
+            quantity = numberFormat.parse(req.getParameter("quantity")).intValue();
         } catch (ParseException e) {
             req.setAttribute("error", "It is not a number");
             doGet(req, resp);
             return;
-        } catch (OutOfStockException e) {
+        }
+        try {
+            req.setAttribute("quantity", quantity);
+            long productId = product.getId();
+            cartService.add(req, productId, quantity);
+        }  catch (OutOfStockException e) {
             req.setAttribute("error", e.getMessage());
             doGet(req, resp);
             return;
