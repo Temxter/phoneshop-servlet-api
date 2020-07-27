@@ -20,12 +20,12 @@
         <tr>
             <td>Image</td>
             <td>Description
-                <tags:sortLink field="description" order="asc" query="${param.query}"></tags:sortLink>
-                <tags:sortLink field="description" order="desc" query="${param.query}"></tags:sortLink>
+                <tags:sortLink field="DESCRIPTION" order="ASC" query="${param.query}"></tags:sortLink>
+                <tags:sortLink field="DESCRIPTION" order="DESC" query="${param.query}"></tags:sortLink>
             </td>
             <td class="price">Price
-                <tags:sortLink field="price" order="asc" query="${param.query}"></tags:sortLink>
-                <tags:sortLink field="price" order="desc" query="${param.query}"></tags:sortLink>
+                <tags:sortLink field="PRICE" order="ASC" query="${param.query}"></tags:sortLink>
+                <tags:sortLink field="PRICE" order="DESC" query="${param.query}"></tags:sortLink>
             </td>
         </tr>
         </thead>

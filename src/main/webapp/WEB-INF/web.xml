@@ -26,7 +26,7 @@
 
   <servlet>
     <servlet-name>productDetails</servlet-name>
-    <servlet-class>com.es.phoneshop.web.servlets.ProductDetailsPageServletTest</servlet-class>
+    <servlet-class>com.es.phoneshop.web.servlets.ProductDetailsPageServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>

@@ -54,11 +54,13 @@ public class DefaultCartService implements CartService {
                 .filter(item -> item.getProduct().equals(product))
                 .findAny();
 
+        boolean newItem = false;
         CartItem item = null;
         if (optionalItem.isPresent()) {
             item = optionalItem.get();
         } else {
             item = new CartItem(product, 0);
+            newItem = true;
         }
 
         lock.lock();
@@ -68,7 +70,9 @@ public class DefaultCartService implements CartService {
             item.getProduct().setStock(realStock - quantity);
             lock.unlock();
             item.setQuantity(totalClientQuantity);
-            cart.add(item);
+            if (newItem) {
+                cart.add(item);
+            }
             saveList(req, cart);
         } else {
                 throw new OutOfStockException(String
