@@ -32,7 +32,7 @@
         <td class="right-text">${product.stock}</td>
     </tr>
 </table>
-    <form method="POST">
+    <form method="POST" action="${pageContext.request.contextPath}/products/${product.id}">
         <div>
             <label for="quantity">Quantity: </label>
             <input class="right-text" id="quantity" name="quantity"
