@@ -1,18 +1,14 @@
-package com.es.phoneshop.model.services.impl;
+package com.es.phoneshop.services.impl;
 
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.product.ProductSaveSampleData;
-import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
-import com.es.phoneshop.model.services.impl.DefaultRecentlyViewedProductsService;
+import com.es.phoneshop.dao.impl.ArrayListProductDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.powermock.core.PowerMockUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import javax.servlet.http.HttpServletRequest;

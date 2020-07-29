@@ -1,13 +1,13 @@
-package com.es.phoneshop.model.dao.impl;
+package com.es.phoneshop.dao.impl;
 
 import com.es.phoneshop.exceptions.ProductNotFoundException;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.comparators.ProductDescriptionComparator;
-import com.es.phoneshop.model.comparators.ProductPriceComparator;
-import com.es.phoneshop.model.comparators.ProductRelevantSearchComparator;
-import com.es.phoneshop.model.dao.ProductDao;
-import com.es.phoneshop.model.enums.SortField;
-import com.es.phoneshop.model.enums.SortOrder;
+import com.es.phoneshop.comparators.ProductDescriptionComparator;
+import com.es.phoneshop.comparators.ProductPriceComparator;
+import com.es.phoneshop.comparators.ProductRelevantSearchComparator;
+import com.es.phoneshop.dao.ProductDao;
+import com.es.phoneshop.enums.SortField;
+import com.es.phoneshop.enums.SortOrder;
 
 import java.util.*;
 import java.util.stream.Collectors;

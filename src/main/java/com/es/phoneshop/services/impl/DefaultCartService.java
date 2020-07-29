@@ -1,11 +1,11 @@
-package com.es.phoneshop.model.services.impl;
+package com.es.phoneshop.services.impl;
 
-import com.es.phoneshop.cart.Cart;
-import com.es.phoneshop.cart.CartItem;
+import com.es.phoneshop.model.cart.Cart;
+import com.es.phoneshop.model.cart.CartItem;
 import com.es.phoneshop.exceptions.OutOfStockException;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
-import com.es.phoneshop.model.services.CartService;
+import com.es.phoneshop.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.services.CartService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

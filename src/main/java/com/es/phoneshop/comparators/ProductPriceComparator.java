@@ -1,4 +1,4 @@
-package com.es.phoneshop.model.comparators;
+package com.es.phoneshop.comparators;
 
 import com.es.phoneshop.model.product.Product;
 

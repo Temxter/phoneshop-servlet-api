@@ -1,7 +1,7 @@
-package com.es.phoneshop.model.services.impl;
+package com.es.phoneshop.services.impl;
 
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.services.RecentlyViewedProductsService;
+import com.es.phoneshop.services.RecentlyViewedProductsService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;

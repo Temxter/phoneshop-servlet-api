@@ -1,12 +1,10 @@
 package com.es.phoneshop.web.servlets;
 
 import com.es.phoneshop.exceptions.OutOfStockException;
-import com.es.phoneshop.model.dao.ProductDao;
-import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.dao.ProductDao;
+import com.es.phoneshop.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductSaveSampleData;
-import com.es.phoneshop.model.services.CartService;
-import com.es.phoneshop.model.services.impl.DefaultRecentlyViewedProductsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.reflect.Whitebox;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -24,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Locale;
 
 import static org.mockito.ArgumentMatchers.anyString;

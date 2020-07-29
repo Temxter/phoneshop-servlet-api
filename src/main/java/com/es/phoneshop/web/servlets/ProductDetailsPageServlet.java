@@ -1,11 +1,11 @@
 package com.es.phoneshop.web.servlets;
 
-import com.es.phoneshop.model.services.CartService;
-import com.es.phoneshop.model.services.impl.DefaultCartService;
+import com.es.phoneshop.services.CartService;
+import com.es.phoneshop.services.impl.DefaultCartService;
 import com.es.phoneshop.exceptions.OutOfStockException;
-import com.es.phoneshop.model.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.services.impl.DefaultRecentlyViewedProductsService;
+import com.es.phoneshop.services.impl.DefaultRecentlyViewedProductsService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -55,18 +55,18 @@ public class ProductDetailsPageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Product product = getProduct(req);
         int quantity;
+        Locale locale = req.getLocale();
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
         try {
-            Locale locale = req.getLocale();
-            NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
             quantity = numberFormat.parse(req.getParameter("quantity")).intValue();
         } catch (ParseException e) {
             req.setAttribute("error", "It is not a number");
             doGet(req, resp);
             return;
         }
+        req.setAttribute("quantity", quantity);
+        long productId = product.getId();
         try {
-            req.setAttribute("quantity", quantity);
-            long productId = product.getId();
             cartService.add(req, productId, quantity);
         }  catch (OutOfStockException e) {
             req.setAttribute("error", e.getMessage());
