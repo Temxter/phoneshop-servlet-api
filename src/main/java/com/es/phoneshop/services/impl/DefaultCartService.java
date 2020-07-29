@@ -75,6 +75,7 @@ public class DefaultCartService implements CartService {
             }
             saveList(req, cart);
         } else {
+            lock.unlock();
                 throw new OutOfStockException(String
                         .format("Item quantity [= %d] more than stock [= %d] of item!",
                                 totalClientQuantity,
