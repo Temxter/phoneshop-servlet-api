@@ -64,22 +64,24 @@ public class DefaultCartService implements CartService {
         }
 
         lock.lock();
-        int realStock = item.getProduct().getStock();
-        int totalClientQuantity = quantity + item.getQuantity();
-        if (totalClientQuantity <= realStock) {
-            item.getProduct().setStock(realStock - quantity);
-            lock.unlock();
-            item.setQuantity(totalClientQuantity);
-            if (newItem) {
-                cart.add(item);
-            }
-            saveList(req, cart);
-        } else {
-            lock.unlock();
+        try {
+            int realStock = item.getProduct().getStock();
+            int totalClientQuantity = quantity + item.getQuantity();
+            if (totalClientQuantity <= realStock) {
+                item.getProduct().setStock(realStock - quantity);
+                item.setQuantity(totalClientQuantity);
+                if (newItem) {
+                    cart.add(item);
+                }
+                saveList(req, cart);
+            } else {
                 throw new OutOfStockException(String
                         .format("Item quantity [= %d] more than stock [= %d] of item!",
                                 totalClientQuantity,
                                 product.getStock()));
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
