@@ -1,4 +1,4 @@
-package com.es.phoneshop.model.product.dao.impl;
+package com.es.phoneshop.exceptions;
 
 public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException(Long id) {

@@ -20,12 +20,12 @@
         <tr>
             <td>Image</td>
             <td>Description
-                <tags:sortLink field="description" order="asc" query="${param.query}"></tags:sortLink>
-                <tags:sortLink field="description" order="desc" query="${param.query}"></tags:sortLink>
+                <tags:sortLink field="DESCRIPTION" order="ASC" query="${param.query}"></tags:sortLink>
+                <tags:sortLink field="DESCRIPTION" order="DESC" query="${param.query}"></tags:sortLink>
             </td>
             <td class="price">Price
-                <tags:sortLink field="price" order="asc" query="${param.query}"></tags:sortLink>
-                <tags:sortLink field="price" order="desc" query="${param.query}"></tags:sortLink>
+                <tags:sortLink field="PRICE" order="ASC" query="${param.query}"></tags:sortLink>
+                <tags:sortLink field="PRICE" order="DESC" query="${param.query}"></tags:sortLink>
             </td>
         </tr>
         </thead>
@@ -63,5 +63,18 @@
             </tr>
         </c:forEach>
     </table>
+    <c:if test="${not empty recentlyViewedProducts}">
+        <h2>Recently viewed</h2>
+        <div class="viewed-items">
+            <c:forEach var="product" items="${recentlyViewedProducts}">
+                <div class="viewed-item">
+                    <img class="product-tile" src="${product.imageUrl}">
+                    <p><a href="${pageContext.request.contextPath}/products/${product.id}">${product.description}</a></p>
+                    <p><fmt:formatNumber value="${product.productPrice.price}" type="currency"
+                                         currencySymbol="${product.productPrice.currency.symbol}"/></p>
+                </div>
+            </c:forEach>
+        </div>
+    </c:if>
     <script src="${pageContext.servletContext.contextPath}/scripts/popUpScript.js"></script>
 </tags:master>

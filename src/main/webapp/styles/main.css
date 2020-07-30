@@ -21,11 +21,35 @@ td {
   border : 1px solid gray;
   vertical-align: top;
 }
-.price {
+.price, .right-text {
   text-align: right;
 }
 img.product-tile {
   max-width: 64px;
+}
+
+.error {
+  color: red;
+}
+
+.success {
+  color: green;
+}
+
+.viewed-items {
+  display: flex;
+  flex-direction: row;
+}
+
+.viewed-item {
+  margin: 0px 2px;
+  width: 150px;
+  border: #ccc solid 1px;
+  text-align: center;
+}
+
+.viewed-item > img {
+  width: 100px;
 }
 
 /* Page specific styles */

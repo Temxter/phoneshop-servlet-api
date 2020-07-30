@@ -1,10 +1,10 @@
 package com.es.phoneshop.model.product;
 
-import com.es.phoneshop.model.product.dao.impl.ArrayListProductDao;
-import com.es.phoneshop.model.product.dao.ProductDao;
-import com.es.phoneshop.model.product.dao.impl.ProductNotFoundException;
-import com.es.phoneshop.model.product.enums.SortField;
-import com.es.phoneshop.model.product.enums.SortOrder;
+import com.es.phoneshop.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.dao.ProductDao;
+import com.es.phoneshop.exceptions.ProductNotFoundException;
+import com.es.phoneshop.enums.SortField;
+import com.es.phoneshop.enums.SortOrder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -105,9 +105,9 @@ public class ArrayListProductDaoTest
         for (int i = 0; i < expectFirstPrices.size(); i++) {
             assertTrue("Sorting is not right!" + daoProducts.stream()
                             .reduce("",
-                                    (str, productStream) -> str + "[" + productStream.getProductPrice() + "] ",
+                                    (str, productStream) -> str + "[" + productStream.getProductPrice().getPrice() + "] ",
                                     Objects::toString),
-                    expectFirstPrices.get(i).equals(daoProducts.get(i).getProductPrice()));
+                    expectFirstPrices.get(i).equals(daoProducts.get(i).getProductPrice().getPrice()));
         }
     }
 }

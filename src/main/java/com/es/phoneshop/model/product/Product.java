@@ -33,7 +33,7 @@ public class Product {
         this.description = description;
         this.stock = stock;
         this.imageUrl = imageUrl;
-        if (this.priceList == null) {
+        if (priceList == null) {
             this.priceList = new ArrayList<>();
         } else {
             this.priceList = priceList;
@@ -96,5 +96,38 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj != null && obj.getClass() == this.getClass()) {
+            Product otherProduct = (Product) obj;
+            if (otherProduct.id == this.id
+                && otherProduct.code == this.code
+                && otherProduct.stock == this.stock
+                && otherProduct.description.equals(this.description)
+                && otherProduct.imageUrl.equals(this.imageUrl)
+                && otherProduct.currentPrice.equals(this.currentPrice)
+                && otherProduct.priceList.equals(this.priceList)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime*result
+                + id
+                + code
+                + stock
+                + description == null ? 0 : description.hashCode()
+                + imageUrl == null ? 0 : imageUrl.hashCode();
+        return result;
     }
 }
