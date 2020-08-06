@@ -1,10 +1,11 @@
 package com.es.phoneshop.model.product;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Date;
 
-public class ProductPrice {
+public class ProductPrice implements Serializable {
     /** null means there is no price because the product is outdated or new */
     private BigDecimal price;
     /** can be null if the price is null */

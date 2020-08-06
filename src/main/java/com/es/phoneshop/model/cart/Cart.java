@@ -1,9 +1,10 @@
 package com.es.phoneshop.model.cart;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cart {
+public class Cart implements Serializable {
     private List<CartItem> itemList;
 
     public Cart() {
@@ -20,6 +21,6 @@ public class Cart {
 
     @Override
     public String toString() {
-        return itemList.toString();
+        return "Cart = " + itemList.toString();
     }
 }

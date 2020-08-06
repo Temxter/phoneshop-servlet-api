@@ -67,7 +67,7 @@ public class DefaultCartService implements CartService {
         try {
             int realStock = item.getProduct().getStock();
             int totalClientQuantity = quantity + item.getQuantity();
-            if (totalClientQuantity <= realStock) {
+            if (quantity <= realStock) {
                 item.getProduct().setStock(realStock - quantity);
                 item.setQuantity(totalClientQuantity);
                 if (newItem) {
@@ -77,7 +77,7 @@ public class DefaultCartService implements CartService {
             } else {
                 throw new OutOfStockException(String
                         .format("Item quantity [= %d] more than stock [= %d] of item!",
-                                totalClientQuantity,
+                                quantity,
                                 product.getStock()));
             }
         } finally {
