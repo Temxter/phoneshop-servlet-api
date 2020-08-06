@@ -52,6 +52,9 @@ public class DefaultCartService implements CartService {
 
     @Override
     public void update(HttpServletRequest req, long productId, int quantity) throws OutOfStockException {
+        if (quantity == 0) {
+            delete(req, productId);
+        }
         changeProductInCart(req, productId, quantity, true);
     }
 

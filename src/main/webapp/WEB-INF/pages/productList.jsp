@@ -11,6 +11,13 @@
     <p>
         Welcome to Expert-Soft training!
     </p>
+
+    <c:if test="${not empty param.message}">
+        <p class="success">Successfully added to cart</p>
+    </c:if>
+    <c:if test="${not empty param.error}">
+        <p class="error">Error added to cart</p>
+    </c:if>
     <form method="get">
         <input name="query" type="text" value="${query}">
         <input type="submit" value="Search">
@@ -27,6 +34,7 @@
                 <tags:sortLink field="PRICE" order="ASC" query="${param.query}"></tags:sortLink>
                 <tags:sortLink field="PRICE" order="DESC" query="${param.query}"></tags:sortLink>
             </td>
+            <td>Add to cart</td>
         </tr>
         </thead>
         <c:forEach var="product" items="${products}">
@@ -60,6 +68,20 @@
                     </span>
                   </div>
                 </td>
+                <td>
+                    <button formaction="${pageContext.request.contextPath}/products/${product.id}?quantity=1&returnMainPage=true"
+                            form="addToCartForm">Add to cart</button>
+                    <c:if test="${param.id == product.id}">
+                        <c:choose>
+                            <c:when test="${not empty param.error}">
+                                <p class="error">${param.error}</p>
+                            </c:when>
+                            <c:otherwise>
+                                <p class="success">${param.message}</p>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+                </td>
             </tr>
         </c:forEach>
     </table>
@@ -76,5 +98,6 @@
             </c:forEach>
         </div>
     </c:if>
+    <form id="addToCartForm" method="post"></form>
     <script src="${pageContext.servletContext.contextPath}/scripts/popUpScript.js"></script>
 </tags:master>

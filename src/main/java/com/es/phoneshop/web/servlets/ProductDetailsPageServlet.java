@@ -54,6 +54,11 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Product product = getProduct(req);
+        String returnMainPage = req.getParameter("returnMainPage");
+        boolean isReturnMainPage = false;
+        if (returnMainPage != null && returnMainPage.equals("true")) {
+            isReturnMainPage = true;
+        }
         int quantity;
         Locale locale = req.getLocale();
         NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
@@ -70,12 +75,24 @@ public class ProductDetailsPageServlet extends HttpServlet {
             cartService.add(req, productId, quantity);
         }  catch (OutOfStockException e) {
             req.setAttribute("error", e.getMessage());
-            doGet(req, resp);
+            if (isReturnMainPage) {
+                resp.sendRedirect(req.getContextPath() + "/products"
+                        + "?error=Sorry " + product.getCode() + " is out of stock&id="
+                        + productId);
+            } else {
+                doGet(req, resp);
+            }
             return;
         }
         setCart(req);
 
-        resp.sendRedirect(req.getContextPath() + "/products/" + product.getId()
-                + "?message=" + product.getCode() + " added to card successfully!");
+        if (isReturnMainPage) {
+            resp.sendRedirect(req.getContextPath() + "/products"
+                    + "?message=" + product.getCode() + " added to card&id="
+                    + productId);
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/products/" + product.getId()
+                    + "?message=" + product.getCode() + " added to card successfully!");
+        }
     }
 }
