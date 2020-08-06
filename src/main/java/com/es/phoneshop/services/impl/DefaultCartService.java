@@ -55,13 +55,26 @@ public class DefaultCartService implements CartService {
         changeProductInCart(req, productId, quantity, true);
     }
 
+    @Override
+    public void delete(HttpServletRequest req, long productId) {
+        Cart cart = getCart(req);
+        List<CartItem> cartList = cart.getItemList();
+        for (CartItem item : cartList) {
+            if (item.getProduct().getId().equals(productId)) {
+                item.getProduct().setStock(item.getProduct().getStock() + item.getQuantity());
+                cartList.remove(item);
+                break;
+            }
+        }
+        saveList(req, cart);
+    }
+
     private void changeProductInCart(HttpServletRequest req, long productId, int quantity, boolean isUpdate) throws OutOfStockException {
         Cart cart = getCart(req);
 
-        Product product = productDao.getProduct(productId);
         List<CartItem> cartList = cart.getItemList();
         Optional<CartItem> optionalItem = cartList.stream()
-                .filter(item -> item.getProduct().equals(product))
+                .filter(item -> item.getProduct().getId().equals(productId))
                 .findAny();
 
         boolean newItem = false;
@@ -69,7 +82,7 @@ public class DefaultCartService implements CartService {
         if (optionalItem.isPresent()) {
             item = optionalItem.get();
         } else {
-            item = new CartItem(product, 0);
+            item = new CartItem(productDao.getProduct(productId), 0);
             newItem = true;
         }
 
@@ -90,7 +103,7 @@ public class DefaultCartService implements CartService {
                 throw new OutOfStockException(String
                         .format("Item quantity [= %d] more than stock [= %d] of item!",
                                 quantity,
-                                product.getStock()));
+                                productDao.getProduct(productId).getStock()));
             }
         } finally {
             lock.unlock();

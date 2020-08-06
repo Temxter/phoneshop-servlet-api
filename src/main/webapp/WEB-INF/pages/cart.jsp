@@ -15,10 +15,6 @@
         <p class="success">${param.message}</p>
     </c:if>
 
-
-<%--    ${paramValues}--%>
-
-
     <form action="${pageContext.request.contextPath}/cart" method="POST">
         <table>
             <thead>
@@ -41,13 +37,17 @@
                     </td>
                     <td>
                         <input class="right-text" id="quantity" name="quantity"
-                               value="${not empty paramValues["quantity"][item.product.id]
-                               ? paramValues["quantity"][item.product.id]
+                               value="${not empty paramValues["quantity"][item.product.id.intValue()]
+                               ? paramValues["quantity"][item.product.id.intValue()]
                                : item.quantity}">
                         <input type="hidden" value="${item.product.id}" name="productId" >
                         <c:if test="${not empty errors[item.product.id.longValue()]}">
                             <p class="error">${errors[item.product.id.longValue()]}</p>
                         </c:if>
+                    </td>
+                    <td>
+                        <button form="deleteForm" formaction="${pageContext.request.contextPath}/deleteProduct/${item.product.id}">
+                            Delete</button>
                     </td>
                 </tr>
             </c:forEach>
@@ -58,4 +58,5 @@
             </button>
         </div>
     </form>
+    <form id="deleteForm" method="POST"></form>
 </tags:master>
