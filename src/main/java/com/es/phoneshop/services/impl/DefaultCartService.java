@@ -46,6 +46,16 @@ public class DefaultCartService implements CartService {
 
     @Override
     public void add(HttpServletRequest req, long productId, int quantity) throws OutOfStockException {
+        changeProductInCart(req, productId, quantity, false);
+
+    }
+
+    @Override
+    public void update(HttpServletRequest req, long productId, int quantity) throws OutOfStockException {
+        changeProductInCart(req, productId, quantity, true);
+    }
+
+    private void changeProductInCart(HttpServletRequest req, long productId, int quantity, boolean isUpdate) throws OutOfStockException {
         Cart cart = getCart(req);
 
         Product product = productDao.getProduct(productId);
@@ -66,9 +76,11 @@ public class DefaultCartService implements CartService {
         lock.lock();
         try {
             int realStock = item.getProduct().getStock();
-            int totalClientQuantity = quantity + item.getQuantity();
-            if (quantity <= realStock) {
-                item.getProduct().setStock(realStock - quantity);
+            int totalClientQuantity = isUpdate
+                    ? quantity
+                    : quantity + item.getQuantity();
+            if (totalClientQuantity - item.getQuantity() <= realStock) {
+                item.getProduct().setStock(realStock - totalClientQuantity + item.getQuantity());
                 item.setQuantity(totalClientQuantity);
                 if (newItem) {
                     cart.add(item);

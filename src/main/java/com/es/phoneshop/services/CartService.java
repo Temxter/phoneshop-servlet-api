@@ -8,4 +8,5 @@ import javax.servlet.http.HttpServletRequest;
 public interface CartService {
     Cart getCart(HttpServletRequest req);
     void add(HttpServletRequest req, long productId, int quantity) throws OutOfStockException;
+    void update(HttpServletRequest req, long productId, int quantity) throws OutOfStockException;
 }

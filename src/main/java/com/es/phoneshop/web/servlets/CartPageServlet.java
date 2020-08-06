@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
 
@@ -34,5 +36,25 @@ public class CartPageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String[] quantities = req.getParameterValues("quantity");
+        String[] productIds = req.getParameterValues("productId");
+        Map<Long, String> errors = new HashMap<>();
+        for (int i = 0; i < productIds.length; i++) {
+            Long productId = Long.parseLong(productIds[i]);
+            try {
+                cartService.update(req, productId, Integer.parseInt(quantities[i]));
+            } catch (OutOfStockException | NumberFormatException e) {
+                errors.put(productId, e.getMessage());
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            req.setAttribute("errors", errors);
+            doGet(req, resp);
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/cart"
+                    + "?message=Cart updated successfully!");
+        }
+
     }
 }
