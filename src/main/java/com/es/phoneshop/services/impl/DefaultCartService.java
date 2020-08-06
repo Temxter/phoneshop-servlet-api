@@ -3,11 +3,11 @@ package com.es.phoneshop.services.impl;
 import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.cart.CartItem;
 import com.es.phoneshop.exceptions.OutOfStockException;
-import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.dao.impl.ArrayListProductDao;
 import com.es.phoneshop.services.CartService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
@@ -66,6 +66,7 @@ public class DefaultCartService implements CartService {
                 break;
             }
         }
+        recalculateCart(cart);
         saveList(req, cart);
     }
 
@@ -93,11 +94,14 @@ public class DefaultCartService implements CartService {
                     ? quantity
                     : quantity + item.getQuantity();
             if (totalClientQuantity - item.getQuantity() <= realStock) {
-                item.getProduct().setStock(realStock - totalClientQuantity + item.getQuantity());
+                item.getProduct().setStock(isUpdate
+                        ? realStock - quantity + item.getQuantity()
+                        : realStock - quantity);
                 item.setQuantity(totalClientQuantity);
                 if (newItem) {
                     cart.add(item);
                 }
+                recalculateCart(cart);
                 saveList(req, cart);
             } else {
                 throw new OutOfStockException(String
@@ -108,6 +112,21 @@ public class DefaultCartService implements CartService {
         } finally {
             lock.unlock();
         }
+    }
+
+    private void recalculateCart(Cart cart) {
+        BigDecimal totalCost = cart.getItemList().stream()
+                .reduce(new BigDecimal(0),
+                        (acc, item) -> acc
+                        .add(item.getProduct().getProductPrice().getPrice()
+                                .multiply(new BigDecimal(item.getQuantity()))),
+                        (bigDecimal, bigDecimal2) -> bigDecimal.add(bigDecimal2));
+        int totalQuantity = cart.getItemList().stream()
+                .reduce(0,
+                        (acc, item) -> acc += item.getQuantity(),
+                        (integer, integer2) -> integer + integer2);
+        cart.setTotalCost(totalCost);
+        cart.setTotalQuantity(totalQuantity);
     }
 
     private void saveList(HttpServletRequest req, Cart cart) {
