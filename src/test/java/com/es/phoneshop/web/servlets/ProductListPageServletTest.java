@@ -1,6 +1,5 @@
 package com.es.phoneshop.web.servlets;
 
-import com.es.phoneshop.web.servlets.ProductListPageServlet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

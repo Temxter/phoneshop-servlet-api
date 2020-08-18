@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class DeleteServlet extends HttpServlet {
+public class DeleteCartItemServlet extends HttpServlet {
 
     private CartService cartService;
 

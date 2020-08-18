@@ -110,7 +110,7 @@ public class DefaultCartService implements CartService {
                 throw new OutOfStockException(String
                         .format("Item quantity [= %d] more than stock [= %d] of item!",
                                 quantity,
-                                productDao.getProduct(productId).getStock()));
+                                item.getProduct().getStock()));
             }
         } finally {
             lock.unlock();

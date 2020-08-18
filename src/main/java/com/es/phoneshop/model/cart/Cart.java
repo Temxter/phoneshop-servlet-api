@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart implements Serializable {
-    private List<CartItem> itemList;
+    private final List<CartItem> itemList;
     private int totalQuantity;
     private BigDecimal totalCost;
 

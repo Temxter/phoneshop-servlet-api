@@ -10,7 +10,7 @@ public class Product implements Serializable {
     private Long id;
     private String code;
     private String description;
-    private List<ProductPrice> priceList;
+    private final List<ProductPrice> priceList;
     private ProductPrice currentPrice;
     private int stock;
     private String imageUrl;
@@ -106,15 +106,13 @@ public class Product implements Serializable {
         }
         if (obj != null && obj.getClass() == this.getClass()) {
             Product otherProduct = (Product) obj;
-            if (otherProduct.id == this.id
-                && otherProduct.code == this.code
-                && otherProduct.stock == this.stock
-                && otherProduct.description.equals(this.description)
-                && otherProduct.imageUrl.equals(this.imageUrl)
-                && otherProduct.currentPrice.equals(this.currentPrice)
-                && otherProduct.priceList.equals(this.priceList)) {
-                return true;
-            }
+            return otherProduct.id == this.id
+                    && otherProduct.code == this.code
+                    && otherProduct.stock == this.stock
+                    && otherProduct.description.equals(this.description)
+                    && otherProduct.imageUrl.equals(this.imageUrl)
+                    && otherProduct.currentPrice.equals(this.currentPrice)
+                    && otherProduct.priceList.equals(this.priceList);
         }
         return false;
     }

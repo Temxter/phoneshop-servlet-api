@@ -54,6 +54,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Product product = getProduct(req);
+        long productId = product.getId();
         String returnMainPage = req.getParameter("returnMainPage");
         boolean isReturnMainPage = false;
         if (returnMainPage != null && returnMainPage.equals("true")) {
@@ -65,21 +66,26 @@ public class ProductDetailsPageServlet extends HttpServlet {
         try {
             quantity = numberFormat.parse(req.getParameter("quantity")).intValue();
         } catch (ParseException e) {
-            req.setAttribute("error", "It is not a number");
-            doGet(req, resp);
+            if (isReturnMainPage) {
+                resp.sendRedirect(String.format("%s/products?error=" +
+                        "It is not a number!&id=%d&quantity=%s",
+                        req.getContextPath(), productId, req.getParameter("quantity")));
+            } else {
+                req.setAttribute("error", "It is not a number");
+                doGet(req, resp);
+            }
             return;
         }
         req.setAttribute("quantity", quantity);
-        long productId = product.getId();
         try {
             cartService.add(req, productId, quantity);
         }  catch (OutOfStockException e) {
-            req.setAttribute("error", e.getMessage());
             if (isReturnMainPage) {
-                resp.sendRedirect(req.getContextPath() + "/products"
-                        + "?error=Sorry " + product.getCode() + " is out of stock&id="
-                        + productId);
+                resp.sendRedirect(String.format("%s/products?error=" +
+                        "%s&id=%d&quantity=%d",
+                        req.getContextPath(), e.getMessage(), productId, quantity));
             } else {
+                req.setAttribute("error", e.getMessage());
                 doGet(req, resp);
             }
             return;
@@ -87,12 +93,11 @@ public class ProductDetailsPageServlet extends HttpServlet {
         setCart(req);
 
         if (isReturnMainPage) {
-            resp.sendRedirect(req.getContextPath() + "/products"
-                    + "?message=" + product.getCode() + " added to card&id="
-                    + productId);
+            resp.sendRedirect(String.format("%s/products?message=%s added to card&id=%d&quantity=%d",
+                    req.getContextPath(), product.getCode(), productId, quantity));
         } else {
-            resp.sendRedirect(req.getContextPath() + "/products/" + product.getId()
-                    + "?message=" + product.getCode() + " added to card successfully!");
+            resp.sendRedirect(String.format("%s/products/%d?message=%s added to card successfully!",
+                    req.getContextPath(), product.getId(), product.getCode()));
         }
     }
 }

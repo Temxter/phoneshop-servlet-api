@@ -56,7 +56,7 @@
 
   <servlet>
     <servlet-name>deleteFromCart</servlet-name>
-    <servlet-class>com.es.phoneshop.web.servlets.DeleteServlet</servlet-class>
+    <servlet-class>com.es.phoneshop.web.servlets.DeleteCartItemServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>

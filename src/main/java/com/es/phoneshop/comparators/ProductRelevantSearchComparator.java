@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public class ProductRelevantSearchComparator implements Comparator<Product> {
 
-    private String splitQuery [];
+    private final String[] splitQuery;
 
     public ProductRelevantSearchComparator(String[] splitQuery) {
         this.splitQuery = splitQuery;
