@@ -40,12 +40,12 @@ public class DefaultRecentlyViewedProductsService implements RecentlyViewedProdu
         if (productLinkedList.contains(product)) {
             productLinkedList.remove(product);
             productLinkedList.addFirst(product);
-            return;
+        } else {
+            if (productLinkedList.size() >= maxSize) {
+                productLinkedList.removeLast();
+            }
+            productLinkedList.addFirst(product);
         }
-        if (productLinkedList.size() >= maxSize) {
-            productLinkedList.removeLast();
-        }
-        productLinkedList.addFirst(product);
         saveProduct(req, productLinkedList);
     }
 

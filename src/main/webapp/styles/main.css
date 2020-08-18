@@ -21,9 +21,15 @@ td {
   border : 1px solid gray;
   vertical-align: top;
 }
-.price, .right-text {
+.price, .right-text, .minicart {
   text-align: right;
 }
+
+.minicart {
+  position: absolute;
+  right: 30px;
+}
+
 img.product-tile {
   max-width: 64px;
 }

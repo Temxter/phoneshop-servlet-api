@@ -2,8 +2,10 @@ package com.es.phoneshop.model.cart;
 
 import com.es.phoneshop.model.product.Product;
 
-public class CartItem {
-    private Product product;
+import java.io.Serializable;
+
+public class CartItem implements Serializable {
+    private final Product product;
     private int quantity;
 
     public CartItem(Product product, int quantity) {
@@ -25,6 +27,6 @@ public class CartItem {
 
     @Override
     public String toString() {
-        return String.format("[product = %s, quantity = %d]", product.getCode(), quantity);
+        return String.format("[%s, %d]", product.getCode(), quantity);
     }
 }

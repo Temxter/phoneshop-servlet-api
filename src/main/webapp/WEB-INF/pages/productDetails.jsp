@@ -39,12 +39,12 @@
                    value="${not empty param.quantity
                    ? param.quantity
                    : 1}">
-            <div>
-                <input type="submit" value="Add to cart">
-            </div>
             <c:if test="${not empty error}">
                 <p class="error">${error}</p>
             </c:if>
+            <div>
+                <input type="submit" value="Add to cart">
+            </div>
         </div>
     </form>
     <c:if test="${not empty recentlyViewedProducts}">

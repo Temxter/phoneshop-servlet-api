@@ -1,7 +1,8 @@
-package com.es.phoneshop.services.impl;
+package com.es.phoneshop.model.services.impl;
 
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.dao.impl.ArrayListProductDao;
+import com.es.phoneshop.services.impl.DefaultRecentlyViewedProductsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
