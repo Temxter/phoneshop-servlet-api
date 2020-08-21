@@ -29,7 +29,7 @@ public class ArrayListOrderDao implements OrderDao {
         return orderList.stream()
                 .filter(order -> id.equals(order.getId()))
                 .findAny()
-                .orElseThrow(() -> new OrderNotFoundException(id));
+                .orElseThrow(() -> new OrderNotFoundException(id.toString()));
     }
 
     @Override
@@ -45,5 +45,13 @@ public class ArrayListOrderDao implements OrderDao {
         }
         order.setId(maxId++);
         orderList.add(order);
+    }
+
+    @Override
+    public Order getOrderBySecureId(String secureId) {
+        return orderList.stream()
+                .filter(order -> secureId.equals(order.getSecureId()))
+                .findAny()
+                .orElseThrow(() -> new OrderNotFoundException(secureId));
     }
 }

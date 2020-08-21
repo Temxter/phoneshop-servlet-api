@@ -4,14 +4,9 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <jsp:useBean id="order" type="com.es.phoneshop.model.order.Order" scope="request"/>
-<tags:master pageTitle="Checkout">
+<tags:master pageTitle="Order overview">
     <head>
     </head>
-
-    <c:if test="${not empty errors}">
-        <p class="error">Fail update order</p>
-    </c:if>
-
     <table>
         <thead>
         <tr>
@@ -63,32 +58,30 @@
         </tr>
     </table>
     <h2>Your details</h2>
-    <form action="${pageContext.request.contextPath}/checkout" method="POST">
-        <table>
-            <tags:formRowCheckout name="First name" nameAttribute="firstName" order="${order}" errors="${errors}"></tags:formRowCheckout>
-            <tags:formRowCheckout name="Last name" nameAttribute="lastName" order="${order}" errors="${errors}"></tags:formRowCheckout>
-            <tags:formRowCheckout name="Phone" nameAttribute="phone" order="${order}" errors="${errors}"></tags:formRowCheckout>
-            <tags:formRowCheckout name="Delivery date" nameAttribute="deliveryDate" order="${order}" errors="${errors}"></tags:formRowCheckout>
-            <tags:formRowCheckout name="Delivery address" nameAttribute="deliveryAddress" order="${order}" errors="${errors}"></tags:formRowCheckout>
-            <tr>
-                <td>Payment method<span style="color: red">*</span></td>
-                <td>
-                    <select name="paymentMethod">
-                        <option></option>
-                        <c:forEach var="paymentMethod" items="${paymentMethodsList}">
-                            <option
-                                ${not empty order.paymentMethod
-                                && paymentMethod == order.paymentMethod
-                                ? "selected" : ""}
-                            >${paymentMethod}</option>
-                        </c:forEach>
-                    </select>
-                    <c:if test="${not empty errors['paymentMethod']}">
-                        <p class="error">${errors['paymentMethod']}</p>
-                    </c:if>
-                </td>
-            </tr>
-        </table>
-        <input value="Submit" type="submit">
-    </form>
+    <table>
+        <tr>
+            <td>First name</td>
+            <td>${order.firstName}</td>
+        </tr>
+        <tr>
+            <td>Last name</td>
+            <td>${order.lastName}</td>
+        </tr>
+        <tr>
+            <td>Phone</td>
+            <td>${order.phone}</td>
+        </tr>
+        <tr>
+            <td>Delivery date</td>
+            <td>${order.deliveryDate}</td>
+        </tr>
+        <tr>
+            <td>Delivery address</td>
+            <td>${order.deliveryAddress}</td>
+        </tr>
+        <tr>
+            <td>Payment method</td>
+            <td>${order.paymentMethod}</td>
+        </tr>
+    </table>
 </tags:master>

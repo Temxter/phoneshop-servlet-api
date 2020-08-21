@@ -73,6 +73,14 @@ public class DefaultCartService implements CartService {
         saveList(req, cart);
     }
 
+    @Override
+    public void clear(HttpServletRequest req) {
+        Cart cart = getCart(req);
+        cart.getItemList().clear();
+        recalculateCart(cart);
+        saveList(req, cart);
+    }
+
     private void changeProductInCart(HttpServletRequest req, long productId, int quantity, boolean isUpdate) throws OutOfStockException {
         Cart cart = getCart(req);
 
@@ -124,11 +132,11 @@ public class DefaultCartService implements CartService {
                         (acc, item) -> acc
                         .add(item.getProduct().getProductPrice().getPrice()
                                 .multiply(new BigDecimal(item.getQuantity()))),
-                        (bigDecimal, bigDecimal2) -> bigDecimal.add(bigDecimal2));
+                        BigDecimal::add);
         int totalQuantity = cart.getItemList().stream()
                 .reduce(0,
                         (acc, item) -> acc += item.getQuantity(),
-                        (integer, integer2) -> integer + integer2);
+                        Integer::sum);
         cart.setTotalCost(totalCost);
         cart.setTotalQuantity(totalQuantity);
     }

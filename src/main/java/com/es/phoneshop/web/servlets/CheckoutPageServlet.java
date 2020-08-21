@@ -60,7 +60,8 @@ public class CheckoutPageServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/pages/checkout.jsp").forward(req, resp);
         } else {
             orderService.placeOrder(order);
-            resp.sendRedirect(String.format("%s/overview/%d", req.getContextPath(), order.getId()));
+            cartService.clear(req);
+            resp.sendRedirect(String.format("%s/order/overview/%s", req.getContextPath(), order.getSecureId()));
         }
     }
 
