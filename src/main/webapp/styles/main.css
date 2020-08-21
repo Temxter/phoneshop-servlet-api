@@ -21,8 +21,13 @@ td {
   border : 1px solid gray;
   vertical-align: top;
 }
-.price, .right-text, .minicart {
+
+.price, .right-text, .minicart, .quantity, .total {
   text-align: right;
+}
+
+.total {
+  font-weight: bold;
 }
 
 .minicart {

@@ -104,6 +104,7 @@ public class DefaultCartService implements CartService {
                 if (newItem) {
                     cart.add(item);
                 }
+                cart.setCurrency(item.getProduct().getProductPrice().getCurrency());
                 recalculateCart(cart);
                 saveList(req, cart);
             } else {
