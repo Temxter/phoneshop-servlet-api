@@ -40,7 +40,7 @@ public class DefaultOrderService implements OrderService {
                 try {
                     return (CartItem)cartItem.clone();
                 } catch (CloneNotSupportedException e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException("Clone of CartItem not supported. (Cloning list of CartItem)", e);
                 }
             }).collect(Collectors.toList()));
 

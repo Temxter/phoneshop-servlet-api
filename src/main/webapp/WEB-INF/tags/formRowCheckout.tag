@@ -3,6 +3,7 @@
 <%@ attribute name="nameAttribute" required="true" %>
 <%@ attribute name="order" required="true" type="com.es.phoneshop.model.order.Order" %>
 <%@ attribute name="errors" required="true" type="java.util.Map"%>
+<%@ attribute name="isDate" required="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <tr>
@@ -10,6 +11,7 @@
     <td>${name}<span style="color: red">*</span></td>
     <td>
         <input name="${nameAttribute}"
+               ${not empty isDate && isDate.equalsIgnoreCase("true") ? "type=\"date\"" : ""}
                value="${not empty error ? param[nameAttribute] : order[nameAttribute]}">
         <c:if test="${not empty error}">
             <p class="error">${error}</p>

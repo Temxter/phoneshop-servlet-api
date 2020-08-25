@@ -68,7 +68,7 @@
             <tags:formRowCheckout name="First name" nameAttribute="firstName" order="${order}" errors="${errors}"></tags:formRowCheckout>
             <tags:formRowCheckout name="Last name" nameAttribute="lastName" order="${order}" errors="${errors}"></tags:formRowCheckout>
             <tags:formRowCheckout name="Phone" nameAttribute="phone" order="${order}" errors="${errors}"></tags:formRowCheckout>
-            <tags:formRowCheckout name="Delivery date" nameAttribute="deliveryDate" order="${order}" errors="${errors}"></tags:formRowCheckout>
+            <tags:formRowCheckout name="Delivery date" nameAttribute="deliveryDate" order="${order}" errors="${errors}" isDate="true"></tags:formRowCheckout>
             <tags:formRowCheckout name="Delivery address" nameAttribute="deliveryAddress" order="${order}" errors="${errors}"></tags:formRowCheckout>
             <tr>
                 <td>Payment method<span style="color: red">*</span></td>

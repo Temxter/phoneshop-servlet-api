@@ -40,31 +40,31 @@ public class DefaultDosProtectionService implements DosProtectionService {
                 resetUser(dosUserInfo);
                 return true;
             }
-            dosUserInfo.setDate(new Date());
+            dosUserInfo.setDateOfLastVisit(new Date());
             return false;
         } else {
             long secondsDiff = calculateSecondsDiff(dosUserInfo);
             if (secondsDiff < maxTime) {
                 //ban condition
-                if (dosUserInfo.getCounter() > maxRequests) {
+                if (dosUserInfo.getVisitsCounter() > maxRequests) {
                     return false;
                 }
             } else {
                 resetUser(dosUserInfo);
             }
-            dosUserInfo.incrementCounter();
+            dosUserInfo.incrementVisitsCounter();
         }
         userCounterMap.put(ip, dosUserInfo);
         return true;
     }
 
     private void resetUser(DosUserInfo user) {
-        user.setCounter(1L);
-        user.setDate(new Date());
+        user.setVisitsCounter(1L);
+        user.setDateOfLastVisit(new Date());
     }
 
     private long calculateSecondsDiff(DosUserInfo user) {
-        long millisecondsDiff = new Date().getTime() - user.getDate().getTime();
+        long millisecondsDiff = new Date().getTime() - user.getDateOfLastVisit().getTime();
         long secondsDiff = TimeUnit.MILLISECONDS.toSeconds(millisecondsDiff);
         return secondsDiff;
     }

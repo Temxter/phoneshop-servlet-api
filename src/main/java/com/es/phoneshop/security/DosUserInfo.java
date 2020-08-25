@@ -3,30 +3,30 @@ package com.es.phoneshop.security;
 import java.util.Date;
 
 public class DosUserInfo {
-    private Date date;
-    private long counter;
+    private Date dateOfLastVisit;
+    private long visitsCounter;
     private boolean isBlocked;
 
     public DosUserInfo(Date date, long counter) {
-        this.date = date;
-        this.counter = counter;
+        this.dateOfLastVisit = date;
+        this.visitsCounter = counter;
         this.isBlocked = false;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateOfLastVisit() {
+        return dateOfLastVisit;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateOfLastVisit(Date dateOfLastVisit) {
+        this.dateOfLastVisit = dateOfLastVisit;
     }
 
-    public long getCounter() {
-        return counter;
+    public long getVisitsCounter() {
+        return visitsCounter;
     }
 
-    public void setCounter(long counter) {
-        this.counter = counter;
+    public void setVisitsCounter(long visitsCounter) {
+        this.visitsCounter = visitsCounter;
     }
 
     public boolean isBlocked() {
@@ -37,7 +37,7 @@ public class DosUserInfo {
         isBlocked = blocked;
     }
 
-    public void incrementCounter() {
-        counter++;
+    public void incrementVisitsCounter() {
+        visitsCounter++;
     }
 }

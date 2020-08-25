@@ -67,10 +67,8 @@ public class CheckoutPageServlet extends HttpServlet {
 
     private void setDeliveryDate (HttpServletRequest req, Map<String, String> errors, Order order) {
         String parameter = "deliveryDate";
-        String value = req.getParameter(parameter);
-        if (value == null || value.isEmpty()) {
-            errors.put(parameter, "Value is required");
-        } else {
+        String value = checkValueOfParameter(req, parameter, errors);
+        if (value != null) {
             try {
                 LocalDate localDate = LocalDate.parse(value);
                 order.setDeliveryDate(localDate);
@@ -82,10 +80,8 @@ public class CheckoutPageServlet extends HttpServlet {
 
     private void setPaymentMethod (HttpServletRequest req, Map<String, String> errors, Order order) {
         String parameter = "paymentMethod";
-        String value = req.getParameter(parameter);
-        if (value == null || value.isEmpty()) {
-            errors.put(parameter, "Value is required");
-        } else {
+        String value = checkValueOfParameter(req, parameter, errors);
+        if (value != null) {
             PaymentMethod paymentMethod = PaymentMethod.valueOf(value);
             order.setPaymentMethod(paymentMethod);
         }
@@ -93,11 +89,19 @@ public class CheckoutPageServlet extends HttpServlet {
 
     private void setRequiredParameter(HttpServletRequest req, String parameter, Map<String, String> errors,
                                       Consumer<String> consumer) {
+        String value = checkValueOfParameter(req, parameter, errors);
+        if (value != null) {
+            consumer.accept(value);
+        }
+    }
+
+    private String checkValueOfParameter(HttpServletRequest req, String parameter, Map<String, String> errors) {
         String value = req.getParameter(parameter);
         if (value == null || value.isEmpty()) {
             errors.put(parameter, "Value is required");
+            return null;
         } else {
-            consumer.accept(value);
+            return value;
         }
     }
 }
