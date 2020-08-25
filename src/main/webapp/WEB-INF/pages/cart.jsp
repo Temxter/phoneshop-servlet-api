@@ -21,8 +21,8 @@
             <tr>
                 <td>Image</td>
                 <td>Description</td>
+                <td class="quantity">Quantity</td>
                 <td class="price">Price</td>
-                <td>Quantity</td>
             </tr>
             </thead>
             <c:forEach var="item" items="${cart.itemList}">
@@ -31,12 +31,8 @@
                         <img class="product-tile" src="${item.product.imageUrl}">
                     </td>
                     <td><a href="${pageContext.request.contextPath}/products/${item.product.id}">${item.product.description}</a></td>
-                    <td class="price">
-                        <fmt:formatNumber value="${item.product.productPrice.price}" type="currency"
-                                          currencySymbol="${item.product.productPrice.currency.symbol}"/>
-                    </td>
                     <td>
-                        <input class="right-text" id="quantity" name="quantity"
+                        <input class="quantity" id="quantity" name="quantity"
                                value="${not empty paramValues["quantity"][item.product.id.intValue()]
                                ? paramValues["quantity"][item.product.id.intValue()]
                                : item.quantity}">
@@ -45,18 +41,37 @@
                             <p class="error">${errors[item.product.id.longValue()]}</p>
                         </c:if>
                     </td>
+                    <td class="price">
+                        <fmt:formatNumber value="${item.product.productPrice.price}" type="currency"
+                                          currencySymbol="${item.product.productPrice.currency.symbol}"/>
+                    </td>
                     <td>
                         <button form="deleteForm" formaction="${pageContext.request.contextPath}/deleteProduct/${item.product.id}">
                             Delete</button>
                     </td>
                 </tr>
             </c:forEach>
+            <tr class="total">
+                <td></td>
+                <td>Total</td>
+                <td class="quantity">${cart.totalQuantity}</td>
+                <td class="price">
+                    <fmt:formatNumber value="${cart.totalCost}" type="currency"
+                                      currencySymbol="${cart.currency.symbol}"/>
+                </td>
+            </tr>
         </table>
+        <p></p>
         <div>
             <button>
                 Update
             </button>
         </div>
+    </form>
+    <form action="${pageContext.request.contextPath}/checkout">
+        <button>
+            Checkout
+        </button>
     </form>
     <form id="deleteForm" method="POST"></form>
 </tags:master>
