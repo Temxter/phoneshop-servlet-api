@@ -22,6 +22,9 @@
         <input name="query" type="text" value="${query}">
         <input type="submit" value="Search">
     </form>
+
+    <p><a href="${pageContext.servletContext.contextPath}/advancedSearchProducts">Advanced search</a></p>
+
     <table>
         <thead>
         <tr>

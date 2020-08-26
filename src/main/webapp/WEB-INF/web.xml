@@ -84,6 +84,16 @@
     <url-pattern>/order/overview/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>AdvancedSearchProduct</servlet-name>
+    <servlet-class>com.es.phoneshop.web.servlets.AdvancedSearchProductPageServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AdvancedSearchProduct</servlet-name>
+    <url-pattern>/advancedSearchProducts</url-pattern>
+  </servlet-mapping>
+
   <filter>
     <filter-name>dosProtection</filter-name>
     <filter-class>com.es.phoneshop.web.filters.DosFilter</filter-class>

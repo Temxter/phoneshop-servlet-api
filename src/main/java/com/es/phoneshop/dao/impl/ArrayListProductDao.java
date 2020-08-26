@@ -1,15 +1,18 @@
 package com.es.phoneshop.dao.impl;
 
-import com.es.phoneshop.exceptions.ProductNotFoundException;
-import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.comparators.ProductDescriptionComparator;
 import com.es.phoneshop.comparators.ProductPriceComparator;
 import com.es.phoneshop.comparators.ProductRelevantSearchComparator;
 import com.es.phoneshop.dao.ProductDao;
 import com.es.phoneshop.enums.SortField;
 import com.es.phoneshop.enums.SortOrder;
+import com.es.phoneshop.exceptions.ProductNotFoundException;
+import com.es.phoneshop.model.product.Product;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ArrayListProductDao implements ProductDao {
@@ -100,5 +103,31 @@ public class ArrayListProductDao implements ProductDao {
         return foundProducts == null
                 ? productList
                 : foundProducts;
+    }
+
+    public List<Product> findProductsByFields(String productCode, BigDecimal minPrice, BigDecimal maxPrice,
+                                              Integer minStock) {
+        List<Product> findProducts = productList;
+        if (productCode != null && !productCode.isEmpty()) {
+            findProducts = findProducts.stream()
+                    .filter(product -> product.getCode().equals(productCode))
+                    .collect(Collectors.toList());
+        }
+        if (minPrice != null) {
+            findProducts = findProducts.stream()
+                    .filter(product -> minPrice.compareTo(product.getProductPrice().getPrice()) <= 0)
+                    .collect(Collectors.toList());
+        }
+        if (maxPrice != null) {
+            findProducts = findProducts.stream()
+                    .filter(product -> maxPrice.compareTo(product.getProductPrice().getPrice()) >= 0)
+                    .collect(Collectors.toList());
+        }
+        if (minStock != null) {
+            findProducts = findProducts.stream()
+                    .filter(product -> product.getStock() >= minStock)
+                    .collect(Collectors.toList());
+        }
+        return findProducts;
     }
 }
