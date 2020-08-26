@@ -30,8 +30,8 @@ public class AdvancedSearchProductPageServlet extends HttpServlet {
 
         Map<String, String> errors = new HashMap<>();
 
-        BigDecimal minPrice = parsePrice(request, "minPrice", errors);
-        BigDecimal maxPrice = parsePrice(request, "maxPrice", errors);
+        BigDecimal minPrice = getPrice(request, "minPrice", errors);
+        BigDecimal maxPrice = getPrice(request, "maxPrice", errors);
         Integer minStock = getMinStock(request, errors);
 
         List<Product> foundProducts = arrayListProductDao.findProductsByFields(productCode, minPrice, maxPrice, minStock);
@@ -61,7 +61,7 @@ public class AdvancedSearchProductPageServlet extends HttpServlet {
         }
     }
 
-    private BigDecimal parsePrice(HttpServletRequest req, String parameter, Map<String, String> errors) {
+    private BigDecimal getPrice(HttpServletRequest req, String parameter, Map<String, String> errors) {
         String value = checkValueOfParameter(req, parameter);
         if (value != null) {
             BigDecimal price = null;
