@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ArrayListProductDao implements ProductDao {
@@ -108,25 +109,22 @@ public class ArrayListProductDao implements ProductDao {
     public List<Product> findProductsByFields(String productCode, BigDecimal minPrice, BigDecimal maxPrice,
                                               Integer minStock) {
         List<Product> findProducts = productList;
-        if (productCode != null && !productCode.isEmpty()) {
+        findProducts = filterComparableValue(productCode, findProducts,
+                    product -> product.getCode().equals(productCode));
+        findProducts = filterComparableValue(minPrice, findProducts,
+                    product -> minPrice.compareTo(product.getProductPrice().getPrice()) <= 0);
+        findProducts = filterComparableValue(maxPrice, findProducts,
+                product -> maxPrice.compareTo(product.getProductPrice().getPrice()) >= 0);
+        findProducts = filterComparableValue(minStock, findProducts, product -> product.getStock() >= minStock);
+        return findProducts;
+    }
+
+    private List<Product> filterComparableValue(Object value, List<Product> findProducts, Predicate<Product> filterCondition) {
+        if (value != null) {
             findProducts = findProducts.stream()
-                    .filter(product -> product.getCode().equals(productCode))
+                    .filter(filterCondition)
                     .collect(Collectors.toList());
-        }
-        if (minPrice != null) {
-            findProducts = findProducts.stream()
-                    .filter(product -> minPrice.compareTo(product.getProductPrice().getPrice()) <= 0)
-                    .collect(Collectors.toList());
-        }
-        if (maxPrice != null) {
-            findProducts = findProducts.stream()
-                    .filter(product -> maxPrice.compareTo(product.getProductPrice().getPrice()) >= 0)
-                    .collect(Collectors.toList());
-        }
-        if (minStock != null) {
-            findProducts = findProducts.stream()
-                    .filter(product -> product.getStock() >= minStock)
-                    .collect(Collectors.toList());
+            return findProducts;
         }
         return findProducts;
     }
